@@ -2,8 +2,8 @@ from flask import Flask
 from flask_cors import CORS
 from .db import db, migrate
 from .models import board, card
-from .routes.board_routes import bp as boards_bp
-from .routes.card_routes import bp as cards_bp
+from .routes.board_routes import boards_bp
+from .routes.card_routes import cards_bp
 import os
 # Import models, blueprints, and anything else needed to set up the app or database
 
