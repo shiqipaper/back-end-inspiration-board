@@ -18,7 +18,7 @@ class Card(db.Model):
             board_id=self.board_id,
         )
         return card_as_dict
-    
+
     @classmethod
     def from_dict(cls, card_data):
         return cls(

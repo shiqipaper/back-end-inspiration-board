@@ -1,5 +1,7 @@
 from flask import abort, make_response
 from ..db import db
+from app.models.board import Board
+from app.models.card import Card
 
 def validate_model(cls, model_id):
     try:
@@ -8,7 +10,14 @@ def validate_model(cls, model_id):
         response = {"message": f"{cls.__name__} {model_id} is invalid"}
         abort(make_response(response , 400))
 
-    query = db.select(cls).where(cls.id == model_id)
+    if cls.__name__ == "Board":
+        query = db.select(Board).where(Board.board_id == model_id)
+    elif cls.__name__ == "Card":
+        query = db.select(Card).where(Card.card_id == model_id)
+    else:
+        response = {"message": "Invalid model type"}
+        abort(make_response(response, 500))
+
     model = db.session.scalar(query)
     
     if not model:
