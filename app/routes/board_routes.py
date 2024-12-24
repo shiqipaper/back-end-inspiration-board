@@ -41,19 +41,13 @@ def get_single_board(board_id):
 def create_card_with_board_id(board_id):
     board = validate_model(Board, board_id)
     request_body = request.get_json()
-
+    request_body["board_id"] = board.board_id
+    
+    if "message" not in request_body or not request_body["message"].strip():
+        return {"message": "Invalid message"}, 400
     if len(request_body["message"]) > 40:
         return {"message": "Invalid message. Length is over 40 characters"}, 400
-    
-    new_card = Card(
-            message=request_body["message"],
-            likes_count=request_body.get("likes_count", 0),
-            board_id=board.board_id
-        )
-    db.session.add(new_card)
-    db.session.commit()
-
-    return {"card": new_card.to_dict()}, 201
+    return {"card": create_model(Card, request_body)}, 201
 
 @boards_bp.get("/<board_id>/cards")
 def get_cards_by_board(board_id):
