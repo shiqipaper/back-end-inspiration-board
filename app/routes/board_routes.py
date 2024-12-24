@@ -42,6 +42,9 @@ def create_card_with_board_id(board_id):
     board = validate_model(Board, board_id)
     request_body = request.get_json()
 
+    if len(request_body["message"]) > 40:
+        return {"message": "Invalid message. Length is over 40 characters"}, 400
+    
     new_card = Card(
             message=request_body["message"],
             likes_count=request_body.get("likes_count", 0),
