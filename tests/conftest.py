@@ -48,8 +48,8 @@ def two_saved_boards(app):
 
 @pytest.fixture
 def one_saved_board(app):
-    board = Board(title="Inspirational Quotes", 
-                  owner="Ada Lovelace")
+    board = Board(title="Spread Kindness", 
+                  owner="Grace")
     db.session.add(board)
     db.session.commit()
 
