@@ -59,7 +59,7 @@ def board_with_two_cards(app, one_saved_board):
     efficiency_card = Card(message="Simplicity is the soul of efficiency",
                        likes_count=0,
                        board_id=1)
-    debugging_card = Card(message="The best error message is the one that never shows up",
+    debugging_card = Card(message="Hip, hip, array",
                        likes_count=0,
                        board_id=1)
 
