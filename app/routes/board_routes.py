@@ -3,6 +3,8 @@ from app.models.board import Board
 from app.models.card import Card
 from ..db import db
 from .route_utilities import validate_model, create_model
+import os
+import requests
 
 boards_bp = Blueprint('boards_bp', __name__, url_prefix='/boards')
 # GET /boards
@@ -41,16 +43,23 @@ def get_single_board(board_id):
 def create_card_with_board_id(board_id):
     board = validate_model(Board, board_id)
     request_body = request.get_json()
+    request_body["board_id"] = board.board_id
+    
+    if "message" not in request_body or not request_body["message"].strip():
+        return {"message": "Invalid message"}, 400
+    if len(request_body["message"]) > 40:
+        return {"message": "Invalid message. Length is over 40 characters"}, 400
+    card = create_model(Card, request_body)
+    message_on_slack_channel(board.title, card["message"])
+    return {"card": card}, 201
 
-    new_card = Card(
-            message=request_body["message"],
-            likes_count=request_body.get("likes_count", 0),
-            board_id=board.board_id
-        )
-    db.session.add(new_card)
-    db.session.commit()
-
-    return {"card": new_card.to_dict()}, 201
+def message_on_slack_channel(board, message):    
+    request_body = {
+        "token": os.environ.get("SLACK_BOT_TOKEN"),
+        "channel": os.environ.get("SLACK_CHANNEL_ID"), 
+        "text": f"Card created on _{board}_: \"{message}\""
+    }
+    requests.post("https://slack.com/api/chat.postMessage", data=request_body)
 
 @boards_bp.get("/<board_id>/cards")
 def get_cards_by_board(board_id):
