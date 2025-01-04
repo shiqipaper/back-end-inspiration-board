@@ -1,8 +1,7 @@
 from flask import Blueprint, request
 from app.models.card import Card
 from ..db import db
-from datetime import datetime
-from .route_utilities import validate_model, create_model
+from .route_utilities import validate_model
 
 # DELETE /cards/<card_id>
 # PUT /cards/<card_id>/like
