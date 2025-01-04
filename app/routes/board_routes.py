@@ -26,7 +26,7 @@ def get_all_boards():
     for board in boards:
         boards_response.append(
             {
-                "id": board.board_id,
+                "board_id": board.board_id,
                 "title": board.title,
                 "owner": board.owner
             }
@@ -50,23 +50,23 @@ def create_card_with_board_id(board_id):
     if len(request_body["message"]) > 40:
         return {"message": "Invalid message. Length is over 40 characters"}, 400
     card = create_model(Card, request_body)
-    message_on_slack_channel(board.title, card["message"])
+    # message_on_slack_channel(board.title, card["message"])
     return {"card": card}, 201
 
-def message_on_slack_channel(board, message):    
-    request_body = {
-        "token": os.environ.get("SLACK_BOT_TOKEN"),
-        "channel": os.environ.get("SLACK_CHANNEL_ID"), 
-        "text": f"Card created on _{board}_: \"{message}\""
-    }
-    requests.post("https://slack.com/api/chat.postMessage", data=request_body)
+# def message_on_slack_channel(board, message):    
+#     request_body = {
+#         "token": os.environ.get("SLACK_BOT_TOKEN"),
+#         "channel": os.environ.get("SLACK_CHANNEL_ID"), 
+#         "text": f"Card created on _{board}_: \"{message}\""
+#     }
+#     requests.post("https://slack.com/api/chat.postMessage", data=request_body)
 
 @boards_bp.get("/<board_id>/cards")
 def get_cards_by_board(board_id):
     board = validate_model(Board, board_id)
 
     response = {
-        "id": board.board_id,
+        "board_id": board.board_id,
         "title": board.title,
         "cards": [card.to_dict() for card in board.cards]
     }
