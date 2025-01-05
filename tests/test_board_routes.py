@@ -64,12 +64,12 @@ def test_get_all_boards_two_saved_boards(client, two_saved_boards):
     assert response.status_code == 200
     assert len(response_body) == 2
     assert response_body[0] == {
-        "id": 1,
+        "board_id": 1,
         "title": "Medical Humor",
         "owner": "Meredith Grey"
     }
     assert response_body[1] == {
-        "id": 2,
+        "board_id": 2,
         "title": "Book Quotes",
         "owner": "Alice Walker"
     }
@@ -82,7 +82,7 @@ def test_get_all_boards_one_saved_board(client, one_saved_board):
     assert response.status_code == 200
     assert len(response_body) == 1
     assert response_body[0] == {
-        "id": 1,
+        "board_id": 1,
         "title": "Spread Kindness",
         "owner": "Grace"
     }
