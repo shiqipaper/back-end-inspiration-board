@@ -1,6 +1,7 @@
 from ..db import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+
 class Board(db.Model):
     board_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str]
@@ -14,7 +15,7 @@ class Board(db.Model):
             owner=self.owner,
         )
         return board_as_dict
-    
+
     @classmethod
     def from_dict(cls, board_data):
         return cls(

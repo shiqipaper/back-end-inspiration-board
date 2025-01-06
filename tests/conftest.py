@@ -9,11 +9,12 @@ import os
 
 load_dotenv()
 
+
 @pytest.fixture
 def app():
     test_config = {
         "TESTING": True,
-        "SQLALCHEMY_DATABASE_URI": os.environ.get('SQLALCHEMY_TEST_DATABASE_URI')
+        "SQLALCHEMY_DATABASE_URI": os.environ.get("SQLALCHEMY_TEST_DATABASE_URI"),
     }
     app = create_app(test_config)
 
@@ -37,10 +38,8 @@ def client(app):
 @pytest.fixture
 def two_saved_boards(app):
     # Arrange
-    medical_board = Board(title="Medical Humor",
-                          owner="Meredith Grey")
-    english_board = Board(title="Book Quotes",
-                          owner="Alice Walker")
+    medical_board = Board(title="Medical Humor", owner="Meredith Grey")
+    english_board = Board(title="Book Quotes", owner="Alice Walker")
 
     db.session.add_all([medical_board, english_board])
     db.session.commit()
@@ -48,20 +47,17 @@ def two_saved_boards(app):
 
 @pytest.fixture
 def one_saved_board(app):
-    board = Board(title="Spread Kindness", 
-                  owner="Grace")
+    board = Board(title="Spread Kindness", owner="Grace")
     db.session.add(board)
     db.session.commit()
 
 
 @pytest.fixture
-def board_with_two_cards(app, one_saved_board):    
-    efficiency_card = Card(message="Simplicity is the soul of efficiency",
-                       likes_count=0,
-                       board_id=1)
-    debugging_card = Card(message="Hip, hip, array",
-                       likes_count=0,
-                       board_id=1)
+def board_with_two_cards(app, one_saved_board):
+    efficiency_card = Card(
+        message="Simplicity is the soul of efficiency", likes_count=0, board_id=1
+    )
+    debugging_card = Card(message="Hip, hip, array", likes_count=0, board_id=1)
 
     db.session.add_all([efficiency_card, debugging_card])
     db.session.commit()

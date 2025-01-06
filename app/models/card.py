@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
 from typing import Optional
 
+
 class Card(db.Model):
     card_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     message: Mapped[str]
