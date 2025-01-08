@@ -4,6 +4,9 @@ from app.models.board import Board
 from app.models.card import Card
 
 
+CHARACTER_LIMIT = 40
+
+
 def validate_model(cls, model_id):
     try:
         model_id = int(model_id)

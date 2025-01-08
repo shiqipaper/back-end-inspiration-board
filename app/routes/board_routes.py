@@ -2,7 +2,7 @@ from flask import Blueprint, request, Response
 from app.models.board import Board
 from app.models.card import Card
 from ..db import db
-from .route_utilities import validate_model, create_model
+from .route_utilities import validate_model, create_model, CHARACTER_LIMIT
 import os
 import requests
 
@@ -43,8 +43,8 @@ def create_card_with_board_id(board_id):
 
     if "message" not in request_body or not request_body["message"].strip():
         return {"message": "Invalid message"}, 400
-    if len(request_body["message"]) > 40:
-        return {"message": "Invalid message. Length is over 40 characters"}, 400
+    if len(request_body["message"]) > CHARACTER_LIMIT:
+        return {"message": f"Invalid message. Length is over {CHARACTER_LIMIT} characters"}, 400
     card = create_model(Card, request_body)
     message_on_slack_channel(board.title, card["message"])
     return {"card": card}, 201
