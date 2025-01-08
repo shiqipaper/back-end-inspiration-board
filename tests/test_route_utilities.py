@@ -2,6 +2,7 @@ from app.routes.route_utilities import validate_model, create_model
 from werkzeug.exceptions import HTTPException
 from app.models.board import Board
 from app.models.card import Card
+from flask import Flask
 import pytest
 
 
@@ -19,6 +20,7 @@ def test_validate_model_board_missing_record(two_saved_boards):
 
     response = error.value.response
     assert response.status == "404 NOT FOUND"
+    assert response.json == {"message": "Board 3 not found"}
 
 
 def test_validate_model_board_invalid_id(two_saved_boards):
@@ -27,6 +29,18 @@ def test_validate_model_board_invalid_id(two_saved_boards):
 
     response = error.value.response
     assert response.status == "400 BAD REQUEST"
+    assert response.json == {"message": "Board dog is invalid"}
+
+
+def test_validate_model_invalid_model():
+    app = Flask(__name__)
+
+    with app.app_context():
+        with pytest.raises(HTTPException) as error:
+            result = validate_model(int, 3)
+
+    response = error.value.response
+    assert response.status == "500 INTERNAL SERVER ERROR"
 
 
 def test_create_model_board(client):
